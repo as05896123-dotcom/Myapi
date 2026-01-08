@@ -1,0 +1,30 @@
+name: Deploy to Fly
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: Deploy App
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: |
+          # ------------------------------------
+          # غير الاسم ده لاسم تطبيقك
+          APP_NAME="change-this-name-99"
+          # ------------------------------------
+          
+          echo "app = '$APP_NAME'" > fly.toml
+          echo "primary_region = 'ams'" >> fly.toml
+          echo "[http_service]" >> fly.toml
+          echo "  internal_port = 8080" >> fly.toml
+          echo "  force_https = true" >> fly.toml
+          echo "  auto_stop_machines = true" >> fly.toml
+          echo "  auto_start_machines = true" >> fly.toml
+          
+          flyctl apps create "$APP_NAME" --org personal || true
+          flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
