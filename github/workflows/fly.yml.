@@ -12,8 +12,8 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
           # ------------------------------------
-          # غير الاسم ده لاسم تطبيقك
-          APP_NAME="change-this-name-99"
+          # الاسم جاهز أهو
+          APP_NAME="fly-yt-api-7755"
           # ------------------------------------
           
           echo "app = '$APP_NAME'" > fly.toml
@@ -24,6 +24,7 @@ jobs:
           echo "  auto_stop_machines = true" >> fly.toml
           echo "  auto_start_machines = true" >> fly.toml
           
+          # الأمر ده بينشئ التطبيق لو مش موجود، أو يكمل لو موجود
           flyctl apps create "$APP_NAME" --org personal || true
           flyctl deploy --remote-only
         env:
